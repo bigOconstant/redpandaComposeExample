@@ -13,7 +13,7 @@ Trying to figure out why none of my apps can talk with redpanda.
    `docker-compose exec redpanda rpk topic create test`
 3. In one terminal bring up C++ listener.
    `docker-compose up developer`
-4. produce a message to topic test from python
+4. In another terminal, produce a message to topic test from python
    `docker-compose exec developer python3 ./scripts/produce.py`
 
 
