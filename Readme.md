@@ -1,24 +1,30 @@
-# vcpkg versioning example code
 
-This is an example C++ project that uses vcpkg versioning.
+## Red panda team, why does this work with kafka but not repdanda? 
 
-It uses three common C++ libraries. CRP (curl lib, makes http request) , librdkafka, and rapidjson (fast json to object mapping).
+Trying to figure out why none of my apps can talk with redpanda.
 
-## Geting started
 
-1. Clone this repo.
-2. init sub modules (where we pull in vcpkg). `git submodule update --init --recursive`
-3. Boot strap vcpkg without telemetry, we don't want Bill Gates looking into our windows at night. `./vcpkg/bootstrap-vcpkg.sh -disableMetrics`
-4. Install dependencies. (`./vcpkg/vcpkg --feature-flags=versions install`)
-5. Configure and compile with cmake. `cmake -B build/ . && cmake --build build/`
-6. Run with `./build/consumer kafka:9092 test admin admin-secret`
 
-## Other Notes
+## Test instructions
 
-**Compile in production mode**:
+1. Bring up redpanda,
+   `docker-compose up -d redpanda`
+2. Add topic test
+   `docker-compose exec redpanda rpk topic create test`
+3. In one terminal bring up C++ listener.
+   `docker-compose up developer`
+4. produce a message to topic test from python
+   `docker-compose exec developer python3 ./scripts/produce.py`
 
-```bash
-        cmake  -B build/ . && cmake -DCMAKE_BUILD_TYPE=Release --build build/;
-        cd build;
-        make;
-```
+
+### Info about app,
+
+listener code [here](./apps/main.cpp)
+C++ libs used , librdkafka and modern-cpp-kafka.
+
+producer code [here](./scripts/produce.py)
+
+
+
+
+

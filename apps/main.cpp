@@ -12,25 +12,16 @@ using std::endl;
 using rapidjson::Document;
 int main(int argc, char **argv) {
 
-  if (argc != 5) {
-        std::cerr << "Usage: " << argv[0] << " <brokers> <topic> <username> <password>\n";
-        exit(1);
-    }
 
-    std::string brokers = argv[1];
-    kafka::Topic topic  = argv[2];
-    std::string username = argv[3];
-    std::string password = argv[4];
+    std::string brokers = std::getenv("KAFKAURL");
+    kafka::Topic topic  = std::getenv("KAFKATOPIC");
+
     Document d;
      try {
 
         // Create configuration object
         kafka::Properties props ({
             {"bootstrap.servers", brokers},
-            {"security.protocol","SASL_PLAINTEXT"},
-            {"sasl.mechanism","PLAIN"},
-            {"sasl.username",username},
-            {"sasl.password",password}
         });
 
         // Create a consumer instance.

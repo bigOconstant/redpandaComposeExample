@@ -4,6 +4,7 @@
 ################################################
 from ubuntu:latest as developer
 
+# Refresh the OS
 RUN apt-get update
 RUN apt-get upgrade -y
 
@@ -19,17 +20,11 @@ RUN apt-get install libssl-dev -y
 RUN apt-get install jq -y;
 RUN apt-get install pip -y;
 RUN pip install kafka-python;
-
 RUN apt-get install wget -y;
-
 ARG USERNAME=dev 
-
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-
 RUN apt install sudo -y
-
-
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     #
@@ -41,11 +36,18 @@ USER $USERNAME
 
 # set work directory for project
 WORKDIR /Project
+RUN sudo chown -R $USERNAME:$USERNAME /Project 
+WORKDIR /Project
+COPY . .
+RUN sudo chown -R $USERNAME:$USERNAME /Project 
 
-RUN sudo chown -R $USERNAME /Project 
+RUN git submodule update --init --recursive;
+RUN ./vcpkg/bootstrap-vcpkg.sh -disableMetrics;
+RUN cmake  -B build/ . && cmake -DCMAKE_BUILD_TYPE=Release --build build; cd build && make;
 
+RUN ls /Project/build; 
 
 
 WORKDIR /Project
 
-CMD ["sleep","infinity"]
+CMD ["./build/consumer"]
