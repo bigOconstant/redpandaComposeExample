@@ -15,7 +15,7 @@ services:
          target: developer
       command:  -c "/Project/build/consumer" 
       environment:
-         KAFKAURL: "redpanda:29092" # add new topics here appended with :1:1 for who knows why
+         KAFKAURL: "redpanda:29092" 
          KAFKATOPIC: "test"
 
    # zookeeper:
