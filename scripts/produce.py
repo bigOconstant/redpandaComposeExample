@@ -6,7 +6,7 @@ from json import dumps
 
 
 def produce(topic,message):
-    producer = KafkaProducer(bootstrap_servers=os.environ["KAFKAURL"],
+    producer = KafkaProducer(bootstrap_servers="localhost:9092",
                                 api_version=(0, 10, 1))
     msg_as_bytes = str.encode(message)
     producer.send(topic, msg_as_bytes)
@@ -21,5 +21,5 @@ while True:
     line = alerts.readline()
     if not line:
         break
-    print(produce(os.environ["KAFKATOPIC"],line.strip()))
+    print(produce("test",line.strip()))
 alerts.close()
